@@ -1,0 +1,16 @@
+FROM php:7.4.9-fpm
+
+RUN rm -r /var/lib/apt/lists/*
+RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install -y --no-install-recommends \
+    libzip-dev \
+    libpq5 \
+    libpq-dev
+
+RUN docker-php-ext-install -j$(nproc) \
+    zip \
+    pgsql \
+    pdo_pgsql 
+
+RUN curl -sS https://getcomposer.org/installer | \
+    php -- --install-dir=/usr/bin/ --filename=composer
